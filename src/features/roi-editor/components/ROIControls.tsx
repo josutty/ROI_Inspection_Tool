@@ -14,7 +14,6 @@ interface ROIControlsProps {
 export function ROIControls({
   mode,
   vertexCount,
-  onLoadModel,
   onCreateROI,
   onLoadROI,
   onExport,

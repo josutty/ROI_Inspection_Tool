@@ -71,13 +71,13 @@ export function ROISummaryScreen({
     return () => ro.disconnect()
   }, [])
 
-  const handleSelectItem = useCallback((index: number) => {
-    setSelectedIndex(index)
-  }, [])
+  // const handleSelectItem = useCallback((index: number) => {
+  //   setSelectedIndex(index)
+  // }, [])
 
-  const handleResetZoom = useCallback(() => {
-    setSelectedIndex(null)
-  }, [])
+  // const handleResetZoom = useCallback(() => {
+  //   setSelectedIndex(null)
+  // }, [])
 
   const handleExport = useCallback(() => {
     // Create CSV data
