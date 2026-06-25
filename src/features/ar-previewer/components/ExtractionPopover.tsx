@@ -118,7 +118,7 @@ export function ExtractionPopover({
               </svg>
             </button>
             <div>
-              <h2 className="text-gray-900 text-2xl font-bold tracking-tight">
+              <h2 style = {{ fontSize:'1.3em', marginBottom:0}} className="text-gray-900 font-bold tracking-tight">
                 Extracted ROI Images
               </h2>
               <p className="text-gray-600 text-sm mt-1 font-medium">

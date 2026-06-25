@@ -8,8 +8,8 @@ export function HomeScreen({ onStartInspection, onOpenROIEditor }: HomeScreenPro
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50/30 to-blue-100 flex flex-col">
       {/* Glassmorphic Header */}
       <div className="px-8 pt-10 pb-6 bg-white/60 backdrop-blur-2xl border-b border-white/20 shadow-lg">
-        <h1 className="text-5xl font-black text-gray-900 mb-3 tracking-tight bg-gradient-to-r from-blue-600 via-purple-600 to-blue-600 bg-clip-text text-transparent">ROI Inspection Studio</h1>
-        <p className="text-gray-600 text-base font-medium">Upload your STL model and ROI definitions for inspection.</p>
+        <h1 style = {{ fontSize:'2.1em', marginBottom:0}} className="font-black text-gray-900 mb-3 bg-gradient-to-r from-blue-600 via-purple-600 to-blue-600 bg-clip-text text-transparent">ROI Inspection Studio</h1>
+        <p style = {{ fontSize:'0.8em'}} className="text-gray-600 font-medium">Upload your STL model and ROI definitions for inspection.</p>
       </div>
 
       {/* Main Content with Glassmorphic Cards */}

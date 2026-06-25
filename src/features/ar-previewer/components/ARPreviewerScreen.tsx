@@ -153,20 +153,29 @@ export function ARPreviewerScreen({ onNavigateToROISummary, onBack }: ARPreviewe
         </button>
 
         {/* Premium Extract Button - Enhanced Glassmorphic */}
-        <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 z-20">
+        <div style = {{
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  position: "absolute",
+  bottom: "2rem",
+  width: "100%",
+  zIndex: 20,
+}}>
+        <div style={{display: 'contents'}} className="absolute bottom-10 left-1/2 transform -translate-x-1/2 z-20">
           <button
             onClick={handleExtract}
             disabled={!modelFile || rois.length === 0}
-            className="group relative px-12 py-5 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 hover:from-blue-500 hover:via-purple-500 hover:to-pink-500 disabled:from-gray-700 disabled:to-gray-700 disabled:text-gray-400 rounded-3xl text-white font-black text-lg shadow-[0_20px_60px_-15px_rgba(147,51,234,0.6)] transition-all duration-500 hover:shadow-[0_20px_80px_-15px_rgba(147,51,234,0.8)] hover:scale-[1.15] disabled:hover:scale-100 disabled:hover:shadow-none backdrop-blur-2xl border-2 border-white/30 overflow-hidden disabled:border-gray-600 tracking-wide"
+            className="group relative px-12 py-4 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 hover:from-blue-500 hover:via-purple-500 hover:to-pink-500 disabled:from-gray-700 disabled:to-gray-700 disabled:text-gray-400 rounded-3xl text-white font-black text-lg shadow-[0_20px_60px_-15px_rgba(147,51,234,0.6)] transition-all duration-500 hover:shadow-[0_20px_80px_-15px_rgba(147,51,234,0.8)] hover:scale-[1.15] disabled:hover:scale-100 disabled:hover:shadow-none backdrop-blur-2xl border-2 border-white/30 overflow-hidden disabled:border-gray-600 tracking-wide"
           >
             {/* Animated Background Gradient */}
-            <div className="absolute inset-0 bg-gradient-to-r from-blue-400/0 via-purple-400/40 to-pink-400/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl"></div>
+            {/* <div className="absolute inset-0 bg-gradient-to-r from-blue-400/0 via-purple-400/40 to-pink-400/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl"></div> */}
             
             {/* Shimmer Effect */}
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000"></div>
+            {/* <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000"></div> */}
             
             {/* Pulsing Ring Effect */}
-            <div className="absolute inset-0 rounded-3xl border-2 border-white/40 group-hover:scale-110 group-hover:border-white/0 transition-all duration-500"></div>
+            {/* <div className="absolute inset-0 rounded-3xl border-2 border-white/40 group-hover:scale-110 group-hover:border-white/0 transition-all duration-500"></div> */}
             
             <span className="relative z-10 flex items-center gap-4">
               <svg className="w-6 h-6 group-hover:rotate-12 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -178,6 +187,7 @@ export function ARPreviewerScreen({ onNavigateToROISummary, onBack }: ARPreviewe
               </svg>
             </span>
           </button>
+        </div>
         </div>
 
         {showPopover && (
