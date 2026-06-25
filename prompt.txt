@@ -1,0 +1,23 @@
+Goal :
+
+Create a react app for AR inspection system.
+
+Flow:
+
+1. User uploads a CAD .stl/.step model
+2. User clicks start button
+3. Goes to AR camera preview screen
+4. preview screen renders the CAD model's front facing edge overlay placed 1m apart from scene camera. (no tracking currently)
+5. User points to the device camera to the real object
+6. User aligns the cad model that fits over the real object as an overlay.
+7. User locks the pose , and WebXR tracks the cad model to be in the exact position even when the device is moved.
+8. then user clicks on another button "inspect" button.
+9. The app takes the snapshot of the camera preview snapshot and the webXR cad model overlay edges snapshot
+10. Then performs extract the ROI from the camera preview snapshot usint the model overlay's image with certain offset (depending on the chamfer score). This is to remove background edges from the camera previw snapshot.
+11. Compare the real object's edges with 3d model's edges and mark edges that align exactly with 3d model's edges as gree , slighly displaced as yellow and not at all aligned as red. 
+
+Tech:
+react 
+tailwind
+threejs
+opencv js
