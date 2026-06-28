@@ -34,7 +34,6 @@ export function ROIEditorScreen({ onClose }: ROIEditorScreenProps) {
     addVertex,
     closePolygon,
     cancelDrawing,
-    isNearFirstVertex,
   } = usePolygonDrawing()
   const { cursorVertex, updateCursor, clearCursor } = useRaycastCursor()
 
@@ -97,20 +96,57 @@ export function ROIEditorScreen({ onClose }: ROIEditorScreenProps) {
     updateCursor(cameraRef.current, modelRef.current, clientX, clientY, canvasRef.current)
   }, [updateCursor])
 
-  const handleVertexClick = useCallback((vertex: Vertex) => {
+  // const handleVertexClick = useCallback((vertex: Vertex) => {
+  //   if (mode !== 'drawing') return
+
+  //   // Check if clicking near the first vertex to close the polygon
+  //   if (currentVertices.length >= 4 ) {//&& isNearFirstVertex(vertex, currentVertices[0])) {
+  //     const closed = closePolygon()
+  //     if (closed.length >= 4) {
+  //       setPendingVertices(closed)
+  //       setShowLabelInput(true)
+  //     }
+  //   } else {
+  //     addVertex(vertex)
+  //   }
+  // }, [mode, currentVertices, isNearFirstVertex, addVertex, closePolygon])
+
+  /**
+   * Just add vertices.
+   * Saving is handled separately by the Save ROI button.
+   */
+  const handleVertexClick = useCallback(
+    (vertex: Vertex) => {
+      if (mode !== 'drawing') return
+
+      addVertex(vertex)
+    },
+    [mode, addVertex]
+  )
+
+  /**
+   * Finish drawing and ask for label.
+   */
+  const handleSaveROI = useCallback(() => {
     if (mode !== 'drawing') return
 
-    // Check if clicking near the first vertex to close the polygon
-    if (currentVertices.length >= 4 ) {//&& isNearFirstVertex(vertex, currentVertices[0])) {
-      const closed = closePolygon()
-      if (closed.length >= 4) {
-        setPendingVertices(closed)
-        setShowLabelInput(true)
-      }
-    } else {
-      addVertex(vertex)
+    if (currentVertices.length < 4) {
+      alert('A ROI requires at least 4 vertices.')
+      return
     }
-  }, [mode, currentVertices, isNearFirstVertex, addVertex, closePolygon])
+
+    const closedVertices = closePolygon()
+
+    setPendingVertices(closedVertices)
+    setShowLabelInput(true)
+  }, [mode, currentVertices, closePolygon])
+
+  const handleCancelROI = useCallback(() => {
+    cancelDrawing();          // Clear the current polygon and exit drawing mode
+    clearCursor();            // Remove the cursor indicator
+    setPendingVertices([]);   // Clear any pending vertices
+    setShowLabelInput(false); // Hide label dialog if it's open
+  }, [cancelDrawing, clearCursor]);
 
   const handleLabelConfirm = useCallback((label: string) => {
     addROI(label, pendingVertices)
@@ -228,6 +264,8 @@ export function ROIEditorScreen({ onClose }: ROIEditorScreenProps) {
           onCreateROI={handleCreateROI}
           onLoadROI={handleLoadROI}
           onExport={handleExport}
+          onSaveROI={handleSaveROI}
+          onCancelROI={handleCancelROI}
           modelLoaded={!!modelUrl}
           hasROIs={rois.length > 0}
         />

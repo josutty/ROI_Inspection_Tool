@@ -14,8 +14,9 @@ export default defineConfig({
     proxy: {
       '/process': {
         // target: 'http://192.168.83.101:8000',
-        target: 'http://10.42.0.1:8000',
-        changeOrigin: true
+        target: 'http://localhost:8000',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/process/, '/process/mock')
       },
       '/analyse': {
         // target: 'http://192.168.83.101:8000',

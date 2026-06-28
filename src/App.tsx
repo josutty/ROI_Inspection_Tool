@@ -63,6 +63,10 @@ function App() {
             onBack={() => {
               setRoiSummaryState(null)
             }}
+            onFinish={() => {
+              setRoiSummaryState(null)
+              setCurrentScreen('home')
+            }}
           />
         </div>
       )}

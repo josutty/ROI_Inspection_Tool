@@ -1,29 +1,69 @@
 import type { ProjectedVertex } from '../types'
 
 export function cropPolygonFromCanvas(
-  ctx: CanvasRenderingContext2D,
-  projectedVertices: ProjectedVertex[],
-  _width: number,
-  _height: number
-): ImageData | null {
+  sourceCanvas: HTMLCanvasElement,
+  projectedVertices: ProjectedVertex[]
+): HTMLCanvasElement | null {
   if (projectedVertices.length < 3) return null
 
-  // Compute bounding box of the projected polygon
-  let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity
+  let minX = Infinity
+  let minY = Infinity
+  let maxX = -Infinity
+  let maxY = -Infinity
+
   for (const v of projectedVertices) {
-    if (v.screenX < minX) minX = v.screenX
-    if (v.screenY < minY) minY = v.screenY
-    if (v.screenX > maxX) maxX = v.screenX
-    if (v.screenY > maxY) maxY = v.screenY
+    minX = Math.min(minX, v.screenX)
+    minY = Math.min(minY, v.screenY)
+    maxX = Math.max(maxX, v.screenX)
+    maxY = Math.max(maxY, v.screenY)
   }
 
-  const bboxWidth = Math.ceil(maxX - minX)
-  const bboxHeight = Math.ceil(maxY - minY)
-  if (bboxWidth <= 0 || bboxHeight <= 0) return null
+  const left = Math.max(0, Math.floor(minX))
+  const top = Math.max(0, Math.floor(minY))
+  const right = Math.min(sourceCanvas.width, Math.ceil(maxX))
+  const bottom = Math.min(sourceCanvas.height, Math.ceil(maxY))
 
-  // Get image data for just the bounding box
-  const imageData = ctx.getImageData(Math.floor(minX), Math.floor(minY), bboxWidth, bboxHeight)
-  return imageData
+  const width = right - left
+  const height = bottom - top
+
+  if (width <= 0 || height <= 0) return null
+
+  const cropCanvas = document.createElement("canvas")
+  cropCanvas.width = width
+  cropCanvas.height = height
+
+  const cropCtx = cropCanvas.getContext("2d")
+  if (!cropCtx) return null
+
+  cropCtx.beginPath()
+
+  projectedVertices.forEach((v, i) => {
+    const x = v.screenX - left
+    const y = v.screenY - top
+
+    if (i === 0) {
+      cropCtx.moveTo(x, y)
+    } else {
+      cropCtx.lineTo(x, y)
+    }
+  })
+
+  cropCtx.closePath()
+  cropCtx.clip()
+
+  cropCtx.drawImage(
+    sourceCanvas,
+    left,
+    top,
+    width,
+    height,
+    0,
+    0,
+    width,
+    height
+  )
+
+  return cropCanvas
 }
 
 export function downloadImage(dataUrl: string, filename: string): void {

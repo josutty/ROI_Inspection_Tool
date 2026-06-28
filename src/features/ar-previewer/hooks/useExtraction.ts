@@ -24,32 +24,51 @@ export function useExtraction() {
       const projected = projectedROIs.get(roi.id)
       if (!projected || projected.length < 3) continue
 
-      const imageData = cropPolygonFromCanvas(ctx, projected, canvas.width, canvas.height)
-      if (imageData) {
-        const cropCanvas = document.createElement('canvas')
-        cropCanvas.width = imageData.width
-        cropCanvas.height = imageData.height
-        const cropCtx = cropCanvas.getContext('2d')
-        if (cropCtx) {
-          cropCtx.putImageData(imageData, 0, 0)
-          const xs = projected.map(v => v.screenX)
-          const ys = projected.map(v => v.screenY)
-          const minX = Math.min(...xs)
-          const minY = Math.min(...ys)
-          const maxX = Math.max(...xs)
-          const maxY = Math.max(...ys)
-          const bbox: [number, number, number, number] = [minX, minY, maxX - minX, maxY - minY]
-          results.push({
-            roiId: roi.id,
-            label: roi.label,
-            imageDataUrl: cropCanvas.toDataURL('image/png'),
-            width: cropCanvas.width,
-            height: cropCanvas.height,
-            fullFrameImageDataUrl,
-            bbox,
-          })
-        }
-      }
+      // Draw the projected polygon on the captured camera frame
+ctx.strokeStyle = "red";
+ctx.lineWidth = 2;
+
+ctx.beginPath();
+
+projected.forEach((p, i) => {
+  if (i === 0) {
+    ctx.moveTo(p.screenX, p.screenY);
+  } else {
+    ctx.lineTo(p.screenX, p.screenY);
+  }
+});
+
+ctx.closePath();
+ctx.stroke();
+
+      const cropCanvas = cropPolygonFromCanvas(canvas, projected)
+      // document.body.appendChild(canvas)
+      if (!cropCanvas) continue
+
+      const xs = projected.map(v => v.screenX)
+      const ys = projected.map(v => v.screenY)
+
+      const minX = Math.min(...xs)
+      const minY = Math.min(...ys)
+      const maxX = Math.max(...xs)
+      const maxY = Math.max(...ys)
+
+      const bbox: [number, number, number, number] = [
+        minX,
+        minY,
+        maxX - minX,
+        maxY - minY,
+      ]
+
+      results.push({
+        roiId: roi.id,
+        label: roi.label,
+        imageDataUrl: cropCanvas.toDataURL("image/png"),
+        width: cropCanvas.width,
+        height: cropCanvas.height,
+        fullFrameImageDataUrl,
+        bbox,
+      })
     }
     return results
   }, [])
